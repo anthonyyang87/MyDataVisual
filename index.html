@@ -1,1 +1,371 @@
-Hello world! This is a visual for the rise of semiconductor companies in the AI era.
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>The Rise of Semiconductors</title>
+<div id="container"></div>
+<style>
+    .tooltip {
+        position: absolute;
+        text-align: center;
+        width: auto;
+        height: auto;
+        padding: 8px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+</style>
+<script type="module">
+
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+    // Declare the chart dimensions and margins.
+    const width = 960;
+    const height = 800;
+    const marginTop = 100;
+    const marginRight = 100;
+    const marginBottom = 300;
+    const marginLeft = 100;
+
+    // Declare the x (horizontal position) scale.
+    const x = d3.scaleUtc()
+        .domain([new Date("1990-01-01"), new Date("2024-07-01")])
+        .range([marginLeft, width - marginRight]);
+
+    // Declare the y (vertical position) scale.
+    const y = d3.scaleLinear()
+        .domain([0, 100000])
+        .range([height - marginBottom, marginTop]);
+
+    // Create the SVG container.
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Add the x-axis.
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x));
+
+    // Add the y-axis.
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y));
+
+    // Append the SVG element.
+    container.append(svg.node());
+
+    // Load the data from multiple CSV files from a folder.
+    const TTM = "2024"
+
+    const nvdaAttr = {
+        "name": "NVIDIA",
+        "color": "#229954",
+        "ticker": "NVDA"
+    }
+
+    const adiAttr = {
+        "name": "Analog Devices",
+        "color": "#7b241c",
+        "ticker": "ADI"
+    }
+
+    const amdAttr = {
+        "name": "AMD",
+        "color": "#c0392b",
+        "ticker": "AMD"
+    }
+
+    const avgoAttr = {
+        "name": "Broadcom",
+        "color": "#d35400",
+        "ticker": "AVGO"
+    }
+
+    const armAttr = {
+        "name": "Arm",
+        "color": "#5dade2",
+        "ticker": "ARM"
+    }
+
+    const intcAttr = {
+        "name": "Intel",
+        "color": "#2471a3",
+        "ticker": "INTC"
+    }
+
+    const muAttr = {
+        "name": "Micron",
+        "color": "#34495e",
+        "ticker": "MU"
+    }
+
+    const qcomAttr = {
+        "name": "Qualcomm",
+        "color": "#34495e",
+        "ticker": "QCOM"
+    }
+
+    const tsmAttr = {
+        "name": "TSMC",
+        "color": "#f4d03f",
+        "ticker": "TSM"
+    }
+
+    const txnAttr = {
+        "name": "Texas Instruments",
+        "color": "#117864",
+        "ticker": "TXN"
+    }
+
+    const adiIncomeStatementData = await d3.csv("data/SemiconductorCompanies/adi-income-statement-annual.csv");
+    const amdIncomeStatementData = await d3.csv("data/SemiconductorCompanies/amd-income-statement-annual.csv");
+    const avgoIncomeStatementData = await d3.csv("data/SemiconductorCompanies/avgo-income-statement-annual.csv");
+    const armIncomeStatementData = await d3.csv("data/SemiconductorCompanies/arm-income-statement-annual.csv");
+    const intcIncomeStatementData = await d3.csv("data/SemiconductorCompanies/intc-income-statement-annual.csv");
+    const muIncomeStatementData = await d3.csv("data/SemiconductorCompanies/mu-income-statement-annual.csv");
+    const nvdaIncomeStatementData = await d3.csv("data/SemiconductorCompanies/nvda-income-statement-annual.csv");
+    const qcomIncomeStatementData = await d3.csv("data/SemiconductorCompanies/qcom-income-statement-annual.csv");
+    const tsmIncomeStatementData = await d3.csv("data/SemiconductorCompanies/tsm-income-statement-annual.csv");
+    const txnIncomeStatementData = await d3.csv("data/SemiconductorCompanies/txn-income-statement-annual.csv");
+
+    const adiMarketCapData = await d3.csv("data/SemiconductorCompanies/ADI-market-cap.csv");
+    const amdMarketCapData = await d3.csv("data/SemiconductorCompanies/AMD-market-cap.csv");
+    const avgoMarketCapData = await d3.csv("data/SemiconductorCompanies/AVGO-market-cap.csv");
+    const armMarketCapData = await d3.csv("data/SemiconductorCompanies/ARM-market-cap.csv");
+    const intcMarketCapData = await d3.csv("data/SemiconductorCompanies/INTC-market-cap.csv");
+    const muMarketCapData = await d3.csv("data/SemiconductorCompanies/MU-market-cap.csv");
+    const nvdaMarketCapData = await d3.csv("data/SemiconductorCompanies/NVDA-market-cap.csv");
+    const qcomMarketCapData = await d3.csv("data/SemiconductorCompanies/QCOM-market-cap.csv");
+    const tsmMarketCapData = await d3.csv("data/SemiconductorCompanies/TSM-market-cap.csv");
+    const txnMarketCapData = await d3.csv("data/SemiconductorCompanies/TXN-market-cap.csv");
+
+    //get the revenue data for adi. Read in row where year ending is revenue
+    //console.log(adiIncomeStatementData);
+    const adiRevenueData = Object.keys(adiIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +adiIncomeStatementData[0][key]
+    }));
+    const amdRevenueData = Object.keys(amdIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +amdIncomeStatementData[0][key]
+    }));
+    const avgoRevenueData = Object.keys(avgoIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +avgoIncomeStatementData[0][key]
+    }));
+    const armRevenueData = Object.keys(armIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +armIncomeStatementData[0][key]
+    }));
+    const intcRevenueData = Object.keys(intcIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +intcIncomeStatementData[0][key]
+    }));
+    const muRevenueData = Object.keys(muIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +muIncomeStatementData[0][key]
+    }));
+    const nvdaRevenueData = Object.keys(nvdaIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +nvdaIncomeStatementData[0][key]
+    }));
+    const qcomRevenueData = Object.keys(qcomIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +qcomIncomeStatementData[0][key]
+    }));
+    const tsmRevenueData = Object.keys(tsmIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +tsmIncomeStatementData[0][key]
+    }));
+    const txnRevenueData = Object.keys(txnIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
+        date: key === "TTM" ? new Date() : new Date(key),
+        revenue: +txnIncomeStatementData[0][key]
+    }));
+
+    console.log(adiRevenueData);
+
+    /*
+    revenue data looks like this
+    
+
+    */
+    //create line function for revenue where x is the date and y is the revenue
+    //data is in the form of Year Ending: Revenue
+    //read through each element in dictionary and 
+
+    const line = d3.line()
+        .x(d => x(new Date(d.date)))
+        .y(d => y(+d.revenue));
+
+    //append the line to the svg
+    svg.append("path")
+        .datum(adiRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", adiAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(amdRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", amdAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(avgoRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", avgoAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(armRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", armAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(intcRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", intcAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(muRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", muAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(nvdaRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", nvdaAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(qcomRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", qcomAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(tsmRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", tsmAttr.color)
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    svg.append("path")
+        .datum(txnRevenueData)
+        .attr("fill", "none")
+        .attr("stroke", "#34495e")
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
+
+    //Add data points to the line 
+    function addPoints(dataArray, color, company) {
+        svg.selectAll("dot")
+            .data(dataArray)
+            .enter().append("circle")
+            .attr("r", 3)
+            .attr("cx", d => x(d.date))
+            .attr("cy", d => y(d.revenue))
+            .attr("fill", color)
+            .on("mouseover", (event, d) => {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(company + "\nDate: " + d.date.toDateString() + "<br/>Revenue (millions): " + d.revenue)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", d => {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    }
+
+    addPoints(adiRevenueData, adiAttr.color, adiAttr.name);
+    addPoints(amdRevenueData, amdAttr.color, amdAttr.name);
+    addPoints(avgoRevenueData, avgoAttr.color), avgoAttr.name;
+    addPoints(armRevenueData, armAttr.color, armAttr.name);
+    addPoints(intcRevenueData, intcAttr.color, intcAttr.name);
+    addPoints(muRevenueData, muAttr.color, muAttr.name);
+    addPoints(nvdaRevenueData, nvdaAttr.color, nvdaAttr.name);
+    addPoints(qcomRevenueData, qcomAttr.color, qcomAttr.name);
+    addPoints(tsmRevenueData, tsmAttr.color, tsmAttr.name);
+    addPoints(txnRevenueData, txnAttr.color, txnAttr.name);
+
+    // Add a tooltip.
+    const tooltip = d3.select("#container").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    // Add the title.
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", marginTop / 2)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Semiconductor Companies Revenue Over Time");
+
+    //Add a legend to the bottom of the chart
+    const legend = svg.selectAll(".legend")
+        .data([adiAttr, amdAttr, avgoAttr, armAttr, intcAttr, muAttr, nvdaAttr, qcomAttr, tsmAttr, txnAttr])
+        .enter()
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", (d, i) => `translate(${300 + i * 50},${height - marginBottom + 50})`);
+
+    //add colored rectangles to the legend
+
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", d => d.color)
+        .on("click", function (event, d) {
+            //display a pop up block with company information using tooltip
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html(d.name + "<br/>Ticker: " + d.ticker)
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+
+
+        });
+
+    //add labels under the rectangles
+    legend.append("text")
+        .attr("x", 0)
+        .attr("y", 22)
+        .attr("dy", ".35em")
+        .style("text-anchor", "start")
+        .text(d => d.ticker)
+        //make text size smaller
+        .style("font-size", "10px");
+
+
+    //highlight the line when the legend is hovered over
+    legend.on("mouseover", function (event, d) {
+        svg.selectAll("path")
+            .filter(path => path === d)
+            .attr("stroke-width", 3);
+    }).on("mouseout", function (event, d) {
+        svg.selectAll("path")
+            .filter(path => path === d)
+            .attr("stroke-width", 1.5);
+    });
+
+
+</script>
