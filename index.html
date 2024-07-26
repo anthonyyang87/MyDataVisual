@@ -19,7 +19,7 @@
 <script type="module">
 
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
+    import { annotation } from "https://cdn.skypack.dev/d3-svg-annotation";
     // Declare the chart dimensions and margins.
     const width = 960;
     const height = 800;
@@ -56,67 +56,181 @@
     // Append the SVG element.
     container.append(svg.node());
 
+    //Add background color to the chart area for year ranges and add text to the background
+    //PC Era and the rise of the internet
+    svg.append("rect")
+        .attr("x", x(new Date("1990-01-01")))
+        .attr("y", marginTop)
+        .attr("width", x(new Date("2000-01-01")) - x(new Date("1990-01-01")))
+        .attr("height", height - marginBottom - marginTop)
+        .attr("fill", "#85929e")
+    //add text to the top center of the background and change the color to black
+    svg.append("text")
+        .attr("x", x(new Date("1995-01-01")))
+        .attr("y", marginTop + 20)
+        .attr("text-anchor", "middle")
+        .style("fill", "black")
+        .style("font-size", "12px")
+        .text("1990-2000\nPC Era ")
+        .append("tspan")
+        .attr("x", x(new Date("1995-01-01")))
+        .attr("dy", 20)
+        .text("and the rise of the internet");
+
+    //Popularizing the internet and search engines
+    svg.append("rect")
+        .attr("x", x(new Date("2000-01-01")))
+        .attr("y", marginTop)
+        .attr("width", x(new Date("2010-01-01")) - x(new Date("2000-01-01")))
+        .attr("height", height - marginBottom - marginTop)
+        .attr("fill", "#aeb6bf")
+    //add text to the top center of the background and change the color to black
+    svg.append("text")
+        .attr("x", x(new Date("2005-01-01")))
+        .attr("y", marginTop + 20)
+        .attr("text-anchor", "middle")
+        .style("fill", "black")
+        .style("font-size", "12px")
+        .text("2000-2010\nPopularizing the browser ")
+        .append("tspan")
+        .attr("x", x(new Date("2005-01-01")))
+        .attr("dy", 20)
+        .text("and search engines");
+
+    //Mobile devices, social media, and cloud computing
+    svg.append("rect")
+        .attr("x", x(new Date("2010-01-01")))
+        .attr("y", marginTop)
+        .attr("width", x(new Date("2020-01-01")) - x(new Date("2010-01-01")))
+        .attr("height", height - marginBottom - marginTop)
+        .attr("fill", "#ccd1d1")
+    //add text to the top center of the background and change the color to black
+    svg.append("text")
+        .attr("x", x(new Date("2015-01-01")))
+        .attr("y", marginTop + 20)
+        .attr("text-anchor", "middle")
+        .style("fill", "black")
+        .style("font-size", "12px")
+        .text("2010-2020\nMobile devices, social media, ")
+        .append("tspan")
+        .attr("x", x(new Date("2015-01-01")))
+        .attr("dy", 20)
+        .text("and cloud computing");
+
+    //AI, IoT, and Autonomous Systems
+    svg.append("rect")
+        .attr("x", x(new Date("2020-01-01")))
+        .attr("y", marginTop)
+        .attr("width", x(new Date("2024-07-01")) - x(new Date("2020-01-01")))
+        .attr("height", height - marginBottom - marginTop)
+        .attr("fill", "#f0f0f0")
+    //add text to the top center of the background and change the color to black
+    svg.append("text")
+        .attr("x", x(new Date("2022-01-01")))
+        .attr("y", marginTop + 20)
+        .attr("text-anchor", "middle")
+        .style("fill", "black")
+        .style("font-size", "12px")
+        .text("2020-2024\nAI, IoT, ")
+        .append("tspan")
+        .attr("x", x(new Date("2022-01-01")))
+        .attr("dy", 20)
+        .text("and Autonomous Systems");
+
+
     // Load the data from multiple CSV files from a folder.
     const TTM = "2024"
 
     const nvdaAttr = {
         "name": "NVIDIA",
         "color": "#229954",
-        "ticker": "NVDA"
+        "ticker": "NVDA",
+        "description": "Nvidia Corporation[a][b] (/ɛnˈvɪdiə/, en-VID-ee-ə) is an American multinational corporation and technology company headquartered in Santa Clara, California, and incorporated in Delaware.[5] It is a software and fabless company which designs and supplies graphics processing units (GPUs), application programming interfaces (APIs) for data science and high-performance computing, as well as system on a chip units (SoCs) for the mobile computing and automotive market. Nvidia is also a dominant supplier of artificial intelligence (AI) hardware and software.[6][7][8]",
+        "wiki": "https://en.wikipedia.org/wiki/Nvidia",
+        "stock": "https://finance.yahoo.com/quote/NVDA"
     }
 
     const adiAttr = {
         "name": "Analog Devices",
         "color": "#7b241c",
-        "ticker": "ADI"
+        "ticker": "ADI",
+        "description": "Analog Devices, Inc. (ADI), also known simply as Analog, is an American multinational semiconductor company specializing in data conversion, signal processing, and power management technology, headquartered in Wilmington, Massachusetts.[2][3]",
+        "wiki": "https://en.wikipedia.org/wiki/Analog_Devices",
+        "stock": "https://finance.yahoo.com/quote/ADI"
+
     }
 
     const amdAttr = {
         "name": "AMD",
         "color": "#c0392b",
-        "ticker": "AMD"
+        "ticker": "AMD",
+        "description": "Advanced Micro Devices, Inc. (AMD) is an American multinational semiconductor company based in Santa Clara, California, that develops computer processors and related technologies for business and consumer markets. While it initially manufactured its own processors, the company later outsourced its manufacturing, a practice known as going fabless, after GlobalFoundries was spun off in 2009.[5]",
+        "wiki": "https://en.wikipedia.org/wiki/Advanced_Micro_Devices",
+        "stock": "https://finance.yahoo.com/quote/AMD"
     }
 
     const avgoAttr = {
         "name": "Broadcom",
         "color": "#d35400",
-        "ticker": "AVGO"
+        "ticker": "AVGO",
+        "description": "Broadcom Inc. is an American designer, developer, manufacturer and global supplier of a wide range of semiconductor and infrastructure software products.[3] Broadcom's product offerings serve the data center, networking, software, broadband, wireless, and storage and industrial markets.[4] Tan Hock Eng is the company's president and CEO.[5]",
+        "wiki": "https://en.wikipedia.org/wiki/Broadcom_Inc.",
+        "stock": "https://finance.yahoo.com/quote/AVGO"
+
     }
 
     const armAttr = {
         "name": "Arm",
         "color": "#5dade2",
-        "ticker": "ARM"
+        "ticker": "ARM",
+        "description": "Arm Ltd. (stylized as arm) is a British semiconductor and software design company based in Cambridge, England. Its primary business is in the design of ARM processors (CPUs), although it also designs software development tools under the DS-5, RealView and Keil brands, as well as systems and platforms, system-on-a-chip (SoC) infrastructure and software. As a semiconductor IP company, Arm licenses its technology to other companies, which in turn manufacture their own products that incorporate Arm's technology.",
+        "wiki": "https://en.wikipedia.org/wiki/Arm_Holdings",
+        "stock": "https://finance.yahoo.com/quote/ARM"
     }
 
     const intcAttr = {
         "name": "Intel",
         "color": "#2471a3",
-        "ticker": "INTC"
+        "ticker": "INTC",
+        "description": "Intel Corporation is an American multinational corporation and technology company headquartered in Santa Clara, California, in Silicon Valley. It is the world's largest and highest-valued semiconductor chip manufacturer on the basis of revenue,[4][5] and is the developer of the x86 series of microprocessors, the processors found in most personal computers (PCs). Intel supplies microprocessors for computer system manufacturers such as Apple, Lenovo, HP, and Dell.",
+        "wiki": "https://en.wikipedia.org/wiki/Intel",
+        "stock": "https://finance.yahoo.com/quote/INTC"
     }
 
     const muAttr = {
         "name": "Micron",
         "color": "#34495e",
-        "ticker": "MU"
+        "ticker": "MU",
+        "description": "Micron Technology, Inc. is an American producer of computer memory and computer data storage including dynamic random-access memory, flash memory, and USB flash drives. It is headquartered in Boise, Idaho. Its consumer products are marketed under the brands Crucial[4] and Ballistix.",
+        "wiki": "https://en.wikipedia.org/wiki/Micron_Technology",
+        "stock": "https://finance.yahoo.com/quote/MU"
     }
 
     const qcomAttr = {
         "name": "Qualcomm",
-        "color": "#34495e",
-        "ticker": "QCOM"
+        "color": "#ec7063",
+        "ticker": "QCOM",
+        "description": "Qualcomm is an American multinational corporation headquartered in San Diego, California, and incorporated in Delaware. It creates semiconductors, software, and services related to wireless technology. It owns patents critical to the 5G, 4G, CDMA2000, TD-SCDMA and WCDMA mobile communications standards.",
+        "wiki": "https://en.wikipedia.org/wiki/Qualcomm",
+        "stock": "https://finance.yahoo.com/quote/QCOM"
     }
 
     const tsmAttr = {
         "name": "TSMC",
-        "color": "#f4d03f",
-        "ticker": "TSM"
+        "color": "#a569bd",
+        "ticker": "TSM",
+        "description": "Taiwan Semiconductor Manufacturing Company, Limited (TSMC) is a Taiwanese multinational semiconductor contract manufacturing and design company. It is the world's largest dedicated independent (pure-play) semiconductor foundry, with its headquarters and main operations located in the Hsinchu Science Park in Hsinchu, Taiwan.",
+        "wiki": "https://en.wikipedia.org/wiki/TSMC",
+        "stock": "https://finance.yahoo.com/quote/TSM"
     }
 
     const txnAttr = {
         "name": "Texas Instruments",
         "color": "#117864",
-        "ticker": "TXN"
+        "ticker": "TXN",
+        "description": "Texas Instruments Incorporated (TI) is an American technology company headquartered in Dallas, Texas, that designs and manufactures semiconductors and various integrated circuits, which it sells to electronics designers and manufacturers globally. It is one of the top 10 semiconductor companies worldwide based on sales volume.",
+        "wiki": "https://en.wikipedia.org/wiki/Texas_Instruments",
+        "stock": "https://finance.yahoo.com/quote/TXN"
     }
 
     const adiIncomeStatementData = await d3.csv("data/SemiconductorCompanies/adi-income-statement-annual.csv");
@@ -141,8 +255,9 @@
     const tsmMarketCapData = await d3.csv("data/SemiconductorCompanies/TSM-market-cap.csv");
     const txnMarketCapData = await d3.csv("data/SemiconductorCompanies/TXN-market-cap.csv");
 
+
     //get the revenue data for adi. Read in row where year ending is revenue
-    //console.log(adiIncomeStatementData);
+    //console.log(tsmIncomeStatementData);
     const adiRevenueData = Object.keys(adiIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
         date: key === "TTM" ? new Date() : new Date(key),
         revenue: +adiIncomeStatementData[0][key]
@@ -177,14 +292,28 @@
     }));
     const tsmRevenueData = Object.keys(tsmIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
         date: key === "TTM" ? new Date() : new Date(key),
-        revenue: +tsmIncomeStatementData[0][key]
+        revenue: +tsmIncomeStatementData[0][key] / 30
     }));
     const txnRevenueData = Object.keys(txnIncomeStatementData[0]).filter(key => key !== "Year Ending").map(key => ({
         date: key === "TTM" ? new Date() : new Date(key),
         revenue: +txnIncomeStatementData[0][key]
     }));
 
-    console.log(adiRevenueData);
+    console.log(tsmRevenueData);
+
+    //get latest market cap data for each company using last row and second column and add to company attributes
+    adiAttr.marketCap = +adiMarketCapData[adiMarketCapData.length - 1]["Market Cap"];
+    amdAttr.marketCap = +amdMarketCapData[amdMarketCapData.length - 1]["Market Cap"];
+    avgoAttr.marketCap = +avgoMarketCapData[avgoMarketCapData.length - 1]["Market Cap"];
+    armAttr.marketCap = +armMarketCapData[armMarketCapData.length - 1]["Market Cap"];
+    intcAttr.marketCap = +intcMarketCapData[intcMarketCapData.length - 1]["Market Cap"];
+    muAttr.marketCap = +muMarketCapData[muMarketCapData.length - 1]["Market Cap"];
+    nvdaAttr.marketCap = +nvdaMarketCapData[nvdaMarketCapData.length - 1]["Market Cap"];
+    qcomAttr.marketCap = +qcomMarketCapData[qcomMarketCapData.length - 1]["Market Cap"];
+    tsmAttr.marketCap = +tsmMarketCapData[tsmMarketCapData.length - 1]["Market Cap"];
+    txnAttr.marketCap = +txnMarketCapData[txnMarketCapData.length - 1]["Market Cap"];
+
+    //add to company attributes
 
     /*
     revenue data looks like this
@@ -206,6 +335,8 @@
         .attr("stroke", adiAttr.color)
         .attr("stroke-width", 1.5)
         .attr("d", line);
+    //highlight the line when the legend is hovered over
+
 
     svg.append("path")
         .datum(amdRevenueData)
@@ -233,7 +364,8 @@
         .attr("fill", "none")
         .attr("stroke", intcAttr.color)
         .attr("stroke-width", 1.5)
-        .attr("d", line);
+        .attr("d", line)
+    //highlight the line when the legend is hovered over
 
     svg.append("path")
         .datum(muRevenueData)
@@ -266,9 +398,11 @@
     svg.append("path")
         .datum(txnRevenueData)
         .attr("fill", "none")
-        .attr("stroke", "#34495e")
+        .attr("stroke", txnAttr.color)
         .attr("stroke-width", 1.5)
         .attr("d", line);
+
+
 
     //Add data points to the line 
     function addPoints(dataArray, color, company) {
@@ -286,17 +420,29 @@
                 tooltip.html(company + "\nDate: " + d.date.toDateString() + "<br/>Revenue (millions): " + d.revenue)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
+
+                //enlarge the circle when hovered over
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr("r", 4);
             })
             .on("mouseout", d => {
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
+
+                //shrink the circle when mouse is not hovering over it
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr("r", 3);
             });
     }
 
     addPoints(adiRevenueData, adiAttr.color, adiAttr.name);
     addPoints(amdRevenueData, amdAttr.color, amdAttr.name);
-    addPoints(avgoRevenueData, avgoAttr.color), avgoAttr.name;
+    addPoints(avgoRevenueData, avgoAttr.color, avgoAttr.name);
     addPoints(armRevenueData, armAttr.color, armAttr.name);
     addPoints(intcRevenueData, intcAttr.color, intcAttr.name);
     addPoints(muRevenueData, muAttr.color, muAttr.name);
@@ -304,6 +450,106 @@
     addPoints(qcomRevenueData, qcomAttr.color, qcomAttr.name);
     addPoints(tsmRevenueData, tsmAttr.color, tsmAttr.name);
     addPoints(txnRevenueData, txnAttr.color, txnAttr.name);
+
+    //highlight the line when the legend is hovered over and dim the rest
+    //also make the dots larger when hovered over
+
+    /*
+    svg.selectAll("path")
+        .on("mouseover", function (event, d) {
+            svg.selectAll("path")
+                .filter(path => path === d)
+                .attr("stroke-width", 3);
+            //dim the rest of the lines
+            svg.selectAll("path")
+                .filter(path => path !== d)
+                //make the stroke opacity 0.5
+                .attr("stroke-opacity", 0.2);
+            //dim the dots
+            d3.selectAll("circle")
+                .classed("highlight", false)
+                .attr("opacity", 0.2);
+            //highlight the dots of the line that has the same color as the path
+
+            d3.selectAll(`circle[fill="${d.stroke}"]`)
+                .classed("highlight", true)
+                .attr("opacity", 1);
+            //console.log(d);
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html(d.name + "<br/>Hover over the legend for more information")
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        }).on("mouseout", function (event, d) {
+            svg.selectAll("path")
+                .filter(path => path === d)
+                .attr("stroke-width", 1.5);
+            //bring the opacity back to 1
+            svg.selectAll("path")
+                .filter(path => path !== d)
+                .attr("stroke-opacity", 1);
+            d3.selectAll("circle")
+                .classed("highlight", false)
+                .attr("opacity", 1);
+        });
+    */
+    function modifyPathEffects(dataArray, companyAttr) {
+        svg.selectAll("path")
+            .filter(path => path === dataArray)
+            .on("mouseover", function (event, d) {
+                svg.selectAll("path")
+                    .filter(path => path === d)
+                    .attr("stroke-width", 3);
+                //dim the rest of the lines
+                svg.selectAll("path")
+                    .filter(path => path !== d)
+                    //make the stroke opacity 0.5
+                    .attr("stroke-opacity", 0.2);
+                //dim the dots
+                d3.selectAll("circle")
+                    .classed("highlight", false)
+                    .attr("opacity", 0.2);
+                //highlight the dots of the line that has the same color as the path
+
+                d3.selectAll(`circle[fill="${companyAttr.color}"]`)
+                    .classed("highlight", true)
+                    .attr("opacity", 1);
+                //console.log(d);
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(companyAttr.name + "<br/>Hover over the legend for more information")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            }).on("mouseout", function (event, d) {
+                svg.selectAll("path")
+                    .filter(path => path === d)
+                    .attr("stroke-width", 1.5);
+                //bring the opacity back to 1
+                svg.selectAll("path")
+                    .filter(path => path !== d)
+                    .attr("stroke-opacity", 1);
+                d3.selectAll("circle")
+                    .classed("highlight", false)
+                    .attr("opacity", 1);
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    }
+
+    modifyPathEffects(adiRevenueData, adiAttr);
+    modifyPathEffects(amdRevenueData, amdAttr);
+    modifyPathEffects(avgoRevenueData, avgoAttr);
+    modifyPathEffects(armRevenueData, armAttr);
+    modifyPathEffects(intcRevenueData, intcAttr);
+    modifyPathEffects(muRevenueData, muAttr);
+    modifyPathEffects(nvdaRevenueData, nvdaAttr);
+    modifyPathEffects(qcomRevenueData, qcomAttr);
+    modifyPathEffects(tsmRevenueData, tsmAttr);
+    modifyPathEffects(txnRevenueData, txnAttr);
+
 
     // Add a tooltip.
     const tooltip = d3.select("#container").append("div")
@@ -333,15 +579,62 @@
         .attr("width", 19)
         .attr("height", 19)
         .attr("fill", d => d.color)
-        .on("click", function (event, d) {
+        .on("mouseover", function (event, d) {
+            //enlarge the rectangle when hovered over
+            d3.select(event.currentTarget)
+                .transition()
+                .duration(200)
+                .attr("width", 22)
+                .attr("height", 22);
             //display a pop up block with company information using tooltip
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            tooltip.html(d.name + "<br/>Ticker: " + d.ticker)
+            tooltip.html(d.name + "<br/>Ticker: " + d.ticker + "<br/>Market Cap(B):" + d.marketCap / 1000000000 + "<br/>" + d.description + "<br/>Click to view more financial information on yahoo: " + d.stock)
                 .style("left", (event.pageX + 5) + "px")
                 .style("top", (event.pageY - 28) + "px");
+            //highlight the line which color attribute is the same as the rectangle
+            d3.selectAll("path")
+                .classed("highlight", false)
+                .attr("opacity", 0.2);
+            d3.selectAll(`path[stroke="${d.color}"]`)
+                .classed("highlight", true)
+                .attr("opacity", 1);
 
+            //highlight the dots
+            d3.selectAll("circle")
+                .classed("highlight", false)
+                .attr("opacity", 0.2);
+            d3.selectAll(`circle[fill="${d.color}"]`)
+                .classed("highlight", true)
+                .attr("opacity", 1);
+
+        })
+        .on("mouseout", function (event, d) {
+            //shrink the rectangle when mouse is not hovering over it
+            d3.select(event.currentTarget)
+                .transition()
+                .duration(200)
+                .attr("width", 19)
+                .attr("height", 19);
+            //hide the tooltip
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+            //shrink the line when mouse is not hovering over it
+            svg.selectAll("path")
+                .filter(path => path === d)
+                .attr("stroke-width", 1.5);
+            //bring the opacity back to 1 for lines and circles
+            d3.selectAll("path")
+                .attr("opacity", 1);
+            d3.selectAll("circle")
+                .attr("opacity", 1);
+
+        })
+        .on("click", function (event, d) {
+            //open a new tab with the company's information
+            window.open(d.stock, "_blank");
 
         });
 
@@ -355,7 +648,7 @@
         //make text size smaller
         .style("font-size", "10px");
 
-
+    /*
     //highlight the line when the legend is hovered over
     legend.on("mouseover", function (event, d) {
         svg.selectAll("path")
@@ -366,6 +659,10 @@
             .filter(path => path === d)
             .attr("stroke-width", 1.5);
     });
+
+    */
+    //create a listener for the path. When legend item of the same color is hovered over, the line is highlighted
+    //and the rest of the lines are dimmed
 
 
 </script>
