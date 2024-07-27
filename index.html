@@ -1,6 +1,13 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>The Rise of Semiconductors</title>
+
+
+<head>
+    <meta charset="utf-8">
+    <title>The Rise of Semiconductors</title>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+</head>
+
 <div id="container"></div>
 <style>
     .tooltip {
@@ -17,127 +24,7 @@
     }
 </style>
 <script type="module">
-
-    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-    import { annotation } from "https://cdn.skypack.dev/d3-svg-annotation";
-    // Declare the chart dimensions and margins.
-    const width = 960;
-    const height = 800;
-    const marginTop = 100;
-    const marginRight = 100;
-    const marginBottom = 300;
-    const marginLeft = 100;
-
-    // Declare the x (horizontal position) scale.
-    const x = d3.scaleUtc()
-        .domain([new Date("1990-01-01"), new Date("2024-07-01")])
-        .range([marginLeft, width - marginRight]);
-
-    // Declare the y (vertical position) scale.
-    const y = d3.scaleLinear()
-        .domain([0, 100000])
-        .range([height - marginBottom, marginTop]);
-
-    // Create the SVG container.
-    const svg = d3.create("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-    // Add the x-axis.
-    svg.append("g")
-        .attr("transform", `translate(0,${height - marginBottom})`)
-        .call(d3.axisBottom(x));
-
-    // Add the y-axis.
-    svg.append("g")
-        .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisLeft(y));
-
-    // Append the SVG element.
-    container.append(svg.node());
-
-    //Add background color to the chart area for year ranges and add text to the background
-    //PC Era and the rise of the internet
-    svg.append("rect")
-        .attr("x", x(new Date("1990-01-01")))
-        .attr("y", marginTop)
-        .attr("width", x(new Date("2000-01-01")) - x(new Date("1990-01-01")))
-        .attr("height", height - marginBottom - marginTop)
-        .attr("fill", "#85929e")
-    //add text to the top center of the background and change the color to black
-    svg.append("text")
-        .attr("x", x(new Date("1995-01-01")))
-        .attr("y", marginTop + 20)
-        .attr("text-anchor", "middle")
-        .style("fill", "black")
-        .style("font-size", "12px")
-        .text("1990-2000\nPC Era ")
-        .append("tspan")
-        .attr("x", x(new Date("1995-01-01")))
-        .attr("dy", 20)
-        .text("and the rise of the internet");
-
-    //Popularizing the internet and search engines
-    svg.append("rect")
-        .attr("x", x(new Date("2000-01-01")))
-        .attr("y", marginTop)
-        .attr("width", x(new Date("2010-01-01")) - x(new Date("2000-01-01")))
-        .attr("height", height - marginBottom - marginTop)
-        .attr("fill", "#aeb6bf")
-    //add text to the top center of the background and change the color to black
-    svg.append("text")
-        .attr("x", x(new Date("2005-01-01")))
-        .attr("y", marginTop + 20)
-        .attr("text-anchor", "middle")
-        .style("fill", "black")
-        .style("font-size", "12px")
-        .text("2000-2010\nPopularizing the browser ")
-        .append("tspan")
-        .attr("x", x(new Date("2005-01-01")))
-        .attr("dy", 20)
-        .text("and search engines");
-
-    //Mobile devices, social media, and cloud computing
-    svg.append("rect")
-        .attr("x", x(new Date("2010-01-01")))
-        .attr("y", marginTop)
-        .attr("width", x(new Date("2020-01-01")) - x(new Date("2010-01-01")))
-        .attr("height", height - marginBottom - marginTop)
-        .attr("fill", "#ccd1d1")
-    //add text to the top center of the background and change the color to black
-    svg.append("text")
-        .attr("x", x(new Date("2015-01-01")))
-        .attr("y", marginTop + 20)
-        .attr("text-anchor", "middle")
-        .style("fill", "black")
-        .style("font-size", "12px")
-        .text("2010-2020\nMobile devices, social media, ")
-        .append("tspan")
-        .attr("x", x(new Date("2015-01-01")))
-        .attr("dy", 20)
-        .text("and cloud computing");
-
-    //AI, IoT, and Autonomous Systems
-    svg.append("rect")
-        .attr("x", x(new Date("2020-01-01")))
-        .attr("y", marginTop)
-        .attr("width", x(new Date("2024-07-01")) - x(new Date("2020-01-01")))
-        .attr("height", height - marginBottom - marginTop)
-        .attr("fill", "#f0f0f0")
-    //add text to the top center of the background and change the color to black
-    svg.append("text")
-        .attr("x", x(new Date("2022-01-01")))
-        .attr("y", marginTop + 20)
-        .attr("text-anchor", "middle")
-        .style("fill", "black")
-        .style("font-size", "12px")
-        .text("2020-2024\nAI, IoT, ")
-        .append("tspan")
-        .attr("x", x(new Date("2022-01-01")))
-        .attr("dy", 20)
-        .text("and Autonomous Systems");
-
-
+    //Define the revenue data for each company
     // Load the data from multiple CSV files from a folder.
     const TTM = "2024"
 
@@ -300,6 +187,7 @@
     }));
 
     console.log(tsmRevenueData);
+    console.log(adiMarketCapData);
 
     //get latest market cap data for each company using last row and second column and add to company attributes
     adiAttr.marketCap = +adiMarketCapData[adiMarketCapData.length - 1]["Market Cap"];
@@ -313,356 +201,1194 @@
     tsmAttr.marketCap = +tsmMarketCapData[tsmMarketCapData.length - 1]["Market Cap"];
     txnAttr.marketCap = +txnMarketCapData[txnMarketCapData.length - 1]["Market Cap"];
 
-    //add to company attributes
+    //import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    function createRevenueChart() {
+        // Declare the chart dimensions and margins.
+        const width = 960;
+        const height = 800;
+        const marginTop = 100;
+        const marginRight = 100;
+        const marginBottom = 300;
+        const marginLeft = 100;
 
-    /*
-    revenue data looks like this
-    
+        // Declare the x (horizontal position) scale.
+        const x = d3.scaleUtc()
+            .domain([new Date("1990-01-01"), new Date("2024-07-01")])
+            .range([marginLeft, width - marginRight]);
 
-    */
-    //create line function for revenue where x is the date and y is the revenue
-    //data is in the form of Year Ending: Revenue
-    //read through each element in dictionary and 
+        // Declare the y (vertical position) scale.
+        const y = d3.scaleLinear()
+            .domain([0, 100000])
+            .range([height - marginBottom, marginTop]);
 
-    const line = d3.line()
-        .x(d => x(new Date(d.date)))
-        .y(d => y(+d.revenue));
+        // Create the SVG container.
+        const svg = d3.create("svg")
+            .attr("width", width)
+            .attr("height", height);
 
-    //append the line to the svg
-    svg.append("path")
-        .datum(adiRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", adiAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-    //highlight the line when the legend is hovered over
+        // Add the x-axis.
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x))
+            //lable the x-axis
+            .append("text")
+            .attr("font-size", "18px")
+            .attr("fill", "#000")
+            .attr("x", width / 2)
+            .attr("y", 40)
+            .attr("text-anchor", "middle")
+            .text("Year");
 
+        // Add the y-axis.
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y))
+            .append("text")
+            .attr("font-size", "18px")
+            .attr("fill", "#000")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", -60)
+            .attr("text-anchor", "middle")
+            .text("Revenue (millions)");
 
-    svg.append("path")
-        .datum(amdRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", amdAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
+        // Append the SVG element.
+        container.append(svg.node());
 
-    svg.append("path")
-        .datum(avgoRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", avgoAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(armRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", armAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(intcRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", intcAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line)
-    //highlight the line when the legend is hovered over
-
-    svg.append("path")
-        .datum(muRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", muAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(nvdaRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", nvdaAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(qcomRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", qcomAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(tsmRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", tsmAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-    svg.append("path")
-        .datum(txnRevenueData)
-        .attr("fill", "none")
-        .attr("stroke", txnAttr.color)
-        .attr("stroke-width", 1.5)
-        .attr("d", line);
-
-
-
-    //Add data points to the line 
-    function addPoints(dataArray, color, company) {
-        svg.selectAll("dot")
-            .data(dataArray)
-            .enter().append("circle")
-            .attr("r", 3)
-            .attr("cx", d => x(d.date))
-            .attr("cy", d => y(d.revenue))
-            .attr("fill", color)
-            .on("mouseover", (event, d) => {
+        //Add background color to the chart area for year ranges and add text to the background
+        //PC Era and the rise of the internet
+        svg.append("rect")
+            .attr("x", x(new Date("1990-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2000-01-01")) - x(new Date("1990-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#85929e")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("1995-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("1990-2000\nPC Era ")
+            .append("tspan")
+            .attr("x", x(new Date("1995-01-01")))
+            .attr("dy", 20)
+            .text("and the rise of the internet")
+            //highlight the text and show a tooltip when hovered over
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(company + "\nDate: " + d.date.toDateString() + "<br/>Revenue (millions): " + d.revenue)
+                tooltip.html("1990-2000\nThe PC boom of the 1990s marked a significant period of growth and widespread adoption of personal computers in both homes and offices. Driven by the introduction of user-friendly operating systems like Microsoft Windows and powerful processors such as Intel's Pentium, PCs became essential tools for productivity, education, and entertainment. Companies like Dell, Compaq, and HP thrived as demand surged, while software giants like Microsoft and Adobe flourished by providing crucial applications. This era also saw the emergence of the Internet, further propelling PC usage as people began to explore email, web browsing, and online services, laying the foundation for the digital age.")
                     .style("left", (event.pageX + 5) + "px")
-                    .style("top", (event.pageY - 28) + "px");
-
-                //enlarge the circle when hovered over
-                d3.select(event.currentTarget)
-                    .transition()
-                    .duration(200)
-                    .attr("r", 4);
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
             })
-            .on("mouseout", d => {
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
+            });
 
-                //shrink the circle when mouse is not hovering over it
+        //Popularizing the internet and search engines
+        svg.append("rect")
+            .attr("x", x(new Date("2000-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2010-01-01")) - x(new Date("2000-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#aeb6bf")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2005-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2000-2010\nPopularizing the browser ")
+            .append("tspan")
+            .attr("x", x(new Date("2005-01-01")))
+            .attr("dy", 20)
+            .text("and search engines")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2000-2010\nThe 2000s witnessed the rapid growth of the Internet, with the rise of popular search engines like Google and Yahoo, and the emergence of social media platforms such as Facebook and Twitter. The proliferation of high-speed broadband connections enabled users to access a wealth of information, entertainment, and services online, transforming the way people communicate, work, and consume media. E-commerce platforms like Amazon and eBay revolutionized retail, while online video streaming services like YouTube and Netflix changed the entertainment landscape. The era also saw the introduction of smartphones and mobile apps, paving the way for the mobile revolution.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        //Mobile devices, social media, and cloud computing
+        svg.append("rect")
+            .attr("x", x(new Date("2010-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2020-01-01")) - x(new Date("2010-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#ccd1d1")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2015-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2010-2020\nMobile devices, social media, ")
+            .append("tspan")
+            .attr("x", x(new Date("2015-01-01")))
+            .attr("dy", 20)
+            .text("and cloud computing")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2010-2020\nThe 2010s marked the era of mobile devices, social media, and cloud computing, with the widespread adoption of smartphones, tablets, and wearables like the Apple Watch. Social media platforms like Instagram, Snapchat, and TikTok transformed how people connect, share, and consume content, while cloud computing services like Amazon Web Services (AWS) and Microsoft Azure revolutionized data storage, processing, and software delivery. The rise of big data, artificial intelligence, and machine learning fueled innovation in areas like autonomous vehicles, virtual reality, and smart home devices, reshaping industries and society.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        //AI, IoT, and Autonomous Systems
+        svg.append("rect")
+            .attr("x", x(new Date("2020-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2024-07-01")) - x(new Date("2020-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#f0f0f0")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2022-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2020-2024\nAI, IoT, ")
+            .append("tspan")
+            .attr("x", x(new Date("2022-01-01")))
+            .attr("dy", 20)
+            .text("and Autonomous Systems")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2020-2024\nThe 2020s are shaping up to be the era of artificial intelligence, the Internet of Things, and autonomous systems, with advancements in machine learning, robotics, and edge computing driving innovation across industries. AI technologies like natural language processing, computer vision, and deep learning are transforming healthcare, finance, and transportation, while IoT devices and sensors are connecting billions of devices and enabling smart cities, homes, and factories. Autonomous systems like self-driving cars, drones, and robots are becoming more prevalent, promising to revolutionize transportation, logistics, and manufacturing.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+
+        //create line function for revenue where x is the date and y is the revenue
+        //data is in the form of Year Ending: Revenue
+        //read through each element in dictionary and 
+
+        const line = d3.line()
+            .x(d => x(new Date(d.date)))
+            .y(d => y(+d.revenue));
+
+        //append the line to the svg
+        svg.append("path")
+            .datum(adiRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", adiAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+        //highlight the line when the legend is hovered over
+
+
+        svg.append("path")
+            .datum(amdRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", amdAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(avgoRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", avgoAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(armRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", armAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(intcRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", intcAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line)
+        //highlight the line when the legend is hovered over
+
+        svg.append("path")
+            .datum(muRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", muAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(nvdaRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", nvdaAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(qcomRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", qcomAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(tsmRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", tsmAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(txnRevenueData)
+            .attr("fill", "none")
+            .attr("stroke", txnAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+
+
+        //Add data points to the line 
+        function addPoints(dataArray, color, company) {
+            svg.selectAll("dot")
+                .data(dataArray)
+                .enter().append("circle")
+                .attr("r", 3)
+                .attr("cx", d => x(d.date))
+                .attr("cy", d => y(d.revenue))
+                .attr("fill", color)
+                .on("mouseover", (event, d) => {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(company + "\nDate: " + d.date.toDateString() + "<br/>Revenue (millions): " + d.revenue)
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+
+                    //enlarge the circle when hovered over
+                    d3.select(event.currentTarget)
+                        .transition()
+                        .duration(200)
+                        .attr("r", 4);
+                })
+                .on("mouseout", d => {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+
+                    //shrink the circle when mouse is not hovering over it
+                    d3.select(event.currentTarget)
+                        .transition()
+                        .duration(200)
+                        .attr("r", 3);
+                });
+        }
+
+        addPoints(adiRevenueData, adiAttr.color, adiAttr.name);
+        addPoints(amdRevenueData, amdAttr.color, amdAttr.name);
+        addPoints(avgoRevenueData, avgoAttr.color, avgoAttr.name);
+        addPoints(armRevenueData, armAttr.color, armAttr.name);
+        addPoints(intcRevenueData, intcAttr.color, intcAttr.name);
+        addPoints(muRevenueData, muAttr.color, muAttr.name);
+        addPoints(nvdaRevenueData, nvdaAttr.color, nvdaAttr.name);
+        addPoints(qcomRevenueData, qcomAttr.color, qcomAttr.name);
+        addPoints(tsmRevenueData, tsmAttr.color, tsmAttr.name);
+        addPoints(txnRevenueData, txnAttr.color, txnAttr.name);
+
+        //highlight the line when the legend is hovered over and dim the rest
+        //also make the dots larger when hovered over
+        function modifyPathEffects(dataArray, companyAttr) {
+            svg.selectAll("path")
+                .filter(path => path === dataArray)
+                .on("mouseover", function (event, d) {
+                    svg.selectAll("path")
+                        .filter(path => path === d)
+                        .attr("stroke-width", 3);
+                    //dim the rest of the lines
+                    svg.selectAll("path")
+                        .filter(path => path !== d)
+                        //make the stroke opacity 0.5
+                        .attr("stroke-opacity", 0.2);
+                    //dim the dots
+                    d3.selectAll("circle")
+                        .classed("highlight", false)
+                        .attr("opacity", 0.2);
+                    //highlight the dots of the line that has the same color as the path
+
+                    d3.selectAll(`circle[fill="${companyAttr.color}"]`)
+                        .classed("highlight", true)
+                        .attr("opacity", 1);
+                    //console.log(d);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(companyAttr.name + "<br/>Hover over the legend for more information")
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                }).on("mouseout", function (event, d) {
+                    svg.selectAll("path")
+                        .filter(path => path === d)
+                        .attr("stroke-width", 1.5);
+                    //bring the opacity back to 1
+                    svg.selectAll("path")
+                        .filter(path => path !== d)
+                        .attr("stroke-opacity", 1);
+                    d3.selectAll("circle")
+                        .classed("highlight", false)
+                        .attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+        }
+
+        modifyPathEffects(adiRevenueData, adiAttr);
+        modifyPathEffects(amdRevenueData, amdAttr);
+        modifyPathEffects(avgoRevenueData, avgoAttr);
+        modifyPathEffects(armRevenueData, armAttr);
+        modifyPathEffects(intcRevenueData, intcAttr);
+        modifyPathEffects(muRevenueData, muAttr);
+        modifyPathEffects(nvdaRevenueData, nvdaAttr);
+        modifyPathEffects(qcomRevenueData, qcomAttr);
+        modifyPathEffects(tsmRevenueData, tsmAttr);
+        modifyPathEffects(txnRevenueData, txnAttr);
+
+
+        // Add a tooltip.
+        const tooltip = d3.select("#container").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Add the title.
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", marginTop / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Semiconductor Companies Revenue Over Time");
+
+        //Add a legend to the bottom of the chart
+        const legend = svg.selectAll(".legend")
+            .data([adiAttr, amdAttr, avgoAttr, armAttr, intcAttr, muAttr, nvdaAttr, qcomAttr, tsmAttr, txnAttr])
+            .enter()
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => `translate(${300 + i * 50},${height - marginBottom + 50})`);
+
+        //add colored rectangles to the legend
+
+        legend.append("rect")
+            .attr("x", 0)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", d => d.color)
+            .on("mouseover", function (event, d) {
+                //enlarge the rectangle when hovered over
                 d3.select(event.currentTarget)
                     .transition()
                     .duration(200)
-                    .attr("r", 3);
-            });
-    }
+                    .attr("width", 22)
+                    .attr("height", 22);
+                //display a pop up block with company information using tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(d.name + "<br/>Ticker: " + d.ticker + "<br/>Market Cap(B):" + d.marketCap / 1000000000 + "<br/>" + d.description + "<br/>Click to view more financial information on yahoo: " + d.stock)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    .style("max-width", "300px");
+                //highlight the line which color attribute is the same as the rectangle
+                d3.selectAll("path")
+                    .classed("highlight", false)
+                    .attr("opacity", 0.2);
+                d3.selectAll(`path[stroke="${d.color}"]`)
+                    .classed("highlight", true)
+                    .attr("opacity", 1);
 
-    addPoints(adiRevenueData, adiAttr.color, adiAttr.name);
-    addPoints(amdRevenueData, amdAttr.color, amdAttr.name);
-    addPoints(avgoRevenueData, avgoAttr.color, avgoAttr.name);
-    addPoints(armRevenueData, armAttr.color, armAttr.name);
-    addPoints(intcRevenueData, intcAttr.color, intcAttr.name);
-    addPoints(muRevenueData, muAttr.color, muAttr.name);
-    addPoints(nvdaRevenueData, nvdaAttr.color, nvdaAttr.name);
-    addPoints(qcomRevenueData, qcomAttr.color, qcomAttr.name);
-    addPoints(tsmRevenueData, tsmAttr.color, tsmAttr.name);
-    addPoints(txnRevenueData, txnAttr.color, txnAttr.name);
-
-    //highlight the line when the legend is hovered over and dim the rest
-    //also make the dots larger when hovered over
-
-    /*
-    svg.selectAll("path")
-        .on("mouseover", function (event, d) {
-            svg.selectAll("path")
-                .filter(path => path === d)
-                .attr("stroke-width", 3);
-            //dim the rest of the lines
-            svg.selectAll("path")
-                .filter(path => path !== d)
-                //make the stroke opacity 0.5
-                .attr("stroke-opacity", 0.2);
-            //dim the dots
-            d3.selectAll("circle")
-                .classed("highlight", false)
-                .attr("opacity", 0.2);
-            //highlight the dots of the line that has the same color as the path
-
-            d3.selectAll(`circle[fill="${d.stroke}"]`)
-                .classed("highlight", true)
-                .attr("opacity", 1);
-            //console.log(d);
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-            tooltip.html(d.name + "<br/>Hover over the legend for more information")
-                .style("left", (event.pageX + 5) + "px")
-                .style("top", (event.pageY - 28) + "px");
-        }).on("mouseout", function (event, d) {
-            svg.selectAll("path")
-                .filter(path => path === d)
-                .attr("stroke-width", 1.5);
-            //bring the opacity back to 1
-            svg.selectAll("path")
-                .filter(path => path !== d)
-                .attr("stroke-opacity", 1);
-            d3.selectAll("circle")
-                .classed("highlight", false)
-                .attr("opacity", 1);
-        });
-    */
-    function modifyPathEffects(dataArray, companyAttr) {
-        svg.selectAll("path")
-            .filter(path => path === dataArray)
-            .on("mouseover", function (event, d) {
-                svg.selectAll("path")
-                    .filter(path => path === d)
-                    .attr("stroke-width", 3);
-                //dim the rest of the lines
-                svg.selectAll("path")
-                    .filter(path => path !== d)
-                    //make the stroke opacity 0.5
-                    .attr("stroke-opacity", 0.2);
-                //dim the dots
+                //highlight the dots
                 d3.selectAll("circle")
                     .classed("highlight", false)
                     .attr("opacity", 0.2);
-                //highlight the dots of the line that has the same color as the path
-
-                d3.selectAll(`circle[fill="${companyAttr.color}"]`)
+                d3.selectAll(`circle[fill="${d.color}"]`)
                     .classed("highlight", true)
                     .attr("opacity", 1);
-                //console.log(d);
-                tooltip.transition()
+
+            })
+            .on("mouseout", function (event, d) {
+                //shrink the rectangle when mouse is not hovering over it
+                d3.select(event.currentTarget)
+                    .transition()
                     .duration(200)
-                    .style("opacity", .9);
-                tooltip.html(companyAttr.name + "<br/>Hover over the legend for more information")
-                    .style("left", (event.pageX + 5) + "px")
-                    .style("top", (event.pageY - 28) + "px");
-            }).on("mouseout", function (event, d) {
+                    .attr("width", 19)
+                    .attr("height", 19);
+                //hide the tooltip
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                //shrink the line when mouse is not hovering over it
                 svg.selectAll("path")
                     .filter(path => path === d)
                     .attr("stroke-width", 1.5);
-                //bring the opacity back to 1
-                svg.selectAll("path")
-                    .filter(path => path !== d)
-                    .attr("stroke-opacity", 1);
-                d3.selectAll("circle")
-                    .classed("highlight", false)
+                //bring the opacity back to 1 for lines and circles
+                d3.selectAll("path")
                     .attr("opacity", 1);
+                d3.selectAll("circle")
+                    .attr("opacity", 1);
+
+            })
+            .on("click", function (event, d) {
+                //open a new tab with the company's information
+                window.open(d.stock, "_blank");
+
+            });
+
+        //add labels under the rectangles
+        legend.append("text")
+            .attr("x", 0)
+            .attr("y", 22)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(d => d.ticker)
+            //make text size smaller
+            .style("font-size", "10px");
+
+        //use d3-annotate to highlight important events
+
+        const events = {
+            "1990-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Microsoft Windows Windows and Intel Pentium processors",
+                    title: "Wintel Alliance",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 30,
+                    radiusPadding: 10
+                },
+                x: x(new Date("1995-01-01")),
+                y: height - marginBottom - 50,
+                dy: -20,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+
+
+            },
+
+            //2010 Smartphone Revolution
+            "2010-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Apple's iPhone and Google's Android",
+                    title: "Smartphone Revolution",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 30,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2010-01-01")),
+                y: height - marginBottom - 50,
+                dy: -20,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            },
+
+            //Cloud Computing and Big Data
+            "2015-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "AWS, Azure, and Google Cloud",
+                    title: "Emerging Cloud Services and Big Data",
+                    wrap: 220
+                },
+                subject: {
+                    radius: 50,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2011-01-01")),
+                y: height - marginBottom - 180,
+                dy: -40,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            },
+
+            //2022 Generative AI and Autonomous Systems
+            "2022-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Generative AI and Autonomous Systems",
+                    title: "The debut of ChatGPT",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 50,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2022-6-30")),
+                y: height - marginBottom - 100,
+                dy: -20,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            }
+
+        }
+        const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(Object.values(events))
+
+
+        svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations),
+            d3.selectAll(".annotation-group")
+                .style("font-size", "12px")
+                .attr("fill", "black");
+    }
+
+    function createMarketMapGraph() {
+        // Declare the chart dimensions and margins.
+        const width = 960;
+        const height = 800;
+        const marginTop = 100;
+        const marginRight = 100;
+        const marginBottom = 300;
+        const marginLeft = 100;
+
+        const billion = 1000000000;
+        // Declare the x (horizontal position) scale.
+        const x = d3.scaleUtc()
+            .domain([new Date("1990-01-01"), new Date("2024-07-01")])
+            .range([marginLeft, width - marginRight]);
+
+        // Declare the y (vertical position) scale.
+        const y = d3.scaleLinear()
+            .domain([0, 3500])
+            .range([height - marginBottom, marginTop]);
+
+        // Create the SVG container.
+        const svg = d3.create("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Add the x-axis.
+        svg.append("g")
+            .attr("transform", `translate(0,${height - marginBottom})`)
+            .call(d3.axisBottom(x))
+            .append("text")
+            .attr("font-size", "16px")
+            .attr("fill", "#000")
+            .attr("x", width / 2)
+            .attr("y", 30)
+            .attr("text-anchor", "middle")
+            .text("Year");
+
+
+        // Add the y-axis.
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft},0)`)
+            .call(d3.axisLeft(y))
+            .append("text")
+            .attr("font-size", "16px")
+            .attr("fill", "#000")
+            .attr("x", -10)
+            .attr("y", 80)
+            .attr("text-anchor", "start")
+            .text("Market Cap (Billion)");
+
+
+        // Append the SVG element.
+        container.append(svg.node());
+
+        //Add background color to the chart area for year ranges and add text to the background
+        //PC Era and the rise of the internet
+        svg.append("rect")
+            .attr("x", x(new Date("1990-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2000-01-01")) - x(new Date("1990-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#85929e")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("1995-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("1990-2000\nPC Era ")
+            .append("tspan")
+            .attr("x", x(new Date("1995-01-01")))
+            .attr("dy", 20)
+            .text("and the rise of the internet")
+            //highlight the text and show a tooltip when hovered over
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("1990-2000\nThe PC boom of the 1990s marked a significant period of growth and widespread adoption of personal computers in both homes and offices. Driven by the introduction of user-friendly operating systems like Microsoft Windows and powerful processors such as Intel's Pentium, PCs became essential tools for productivity, education, and entertainment. Companies like Dell, Compaq, and HP thrived as demand surged, while software giants like Microsoft and Adobe flourished by providing crucial applications. This era also saw the emergence of the Internet, further propelling PC usage as people began to explore email, web browsing, and online services, laying the foundation for the digital age.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
-    }
 
-    modifyPathEffects(adiRevenueData, adiAttr);
-    modifyPathEffects(amdRevenueData, amdAttr);
-    modifyPathEffects(avgoRevenueData, avgoAttr);
-    modifyPathEffects(armRevenueData, armAttr);
-    modifyPathEffects(intcRevenueData, intcAttr);
-    modifyPathEffects(muRevenueData, muAttr);
-    modifyPathEffects(nvdaRevenueData, nvdaAttr);
-    modifyPathEffects(qcomRevenueData, qcomAttr);
-    modifyPathEffects(tsmRevenueData, tsmAttr);
-    modifyPathEffects(txnRevenueData, txnAttr);
+        //Popularizing the internet and search engines
+        svg.append("rect")
+            .attr("x", x(new Date("2000-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2010-01-01")) - x(new Date("2000-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#aeb6bf")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2005-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2000-2010\nPopularizing the browser ")
+            .append("tspan")
+            .attr("x", x(new Date("2005-01-01")))
+            .attr("dy", 20)
+            .text("and search engines")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2000-2010\nThe 2000s witnessed the rapid growth of the Internet, with the rise of popular search engines like Google and Yahoo, and the emergence of social media platforms such as Facebook and Twitter. The proliferation of high-speed broadband connections enabled users to access a wealth of information, entertainment, and services online, transforming the way people communicate, work, and consume media. E-commerce platforms like Amazon and eBay revolutionized retail, while online video streaming services like YouTube and Netflix changed the entertainment landscape. The era also saw the introduction of smartphones and mobile apps, paving the way for the mobile revolution.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
+        //Mobile devices, social media, and cloud computing
+        svg.append("rect")
+            .attr("x", x(new Date("2010-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2020-01-01")) - x(new Date("2010-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#ccd1d1")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2015-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2010-2020\nMobile devices, social media, ")
+            .append("tspan")
+            .attr("x", x(new Date("2015-01-01")))
+            .attr("dy", 20)
+            .text("and cloud computing")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2010-2020\nThe 2010s marked the era of mobile devices, social media, and cloud computing, with the widespread adoption of smartphones, tablets, and wearables like the Apple Watch. Social media platforms like Instagram, Snapchat, and TikTok transformed how people connect, share, and consume content, while cloud computing services like Amazon Web Services (AWS) and Microsoft Azure revolutionized data storage, processing, and software delivery. The rise of big data, artificial intelligence, and machine learning fueled innovation in areas like autonomous vehicles, virtual reality, and smart home devices, reshaping industries and society.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
-    // Add a tooltip.
-    const tooltip = d3.select("#container").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+        //AI, IoT, and Autonomous Systems
+        svg.append("rect")
+            .attr("x", x(new Date("2020-01-01")))
+            .attr("y", marginTop)
+            .attr("width", x(new Date("2024-07-01")) - x(new Date("2020-01-01")))
+            .attr("height", height - marginBottom - marginTop)
+            .attr("fill", "#f0f0f0")
+        //add text to the top center of the background and change the color to black
+        svg.append("text")
+            .attr("x", x(new Date("2022-01-01")))
+            .attr("y", marginTop + 20)
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
+            .style("font-size", "12px")
+            .text("2020-2024\nAI, IoT, ")
+            .append("tspan")
+            .attr("x", x(new Date("2022-01-01")))
+            .attr("dy", 20)
+            .text("and Autonomous Systems")
+            .on("mouseover", function (event, d) {
+                //make the text bold when hovered over
+                d3.select("text")
+                    .style("font-size", "13px");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html("2020-2024\nThe 2020s are shaping up to be the era of artificial intelligence, the Internet of Things, and autonomous systems, with advancements in machine learning, robotics, and edge computing driving innovation across industries. AI technologies like natural language processing, computer vision, and deep learning are transforming healthcare, finance, and transportation, while IoT devices and sensors are connecting billions of devices and enabling smart cities, homes, and factories. Autonomous systems like self-driving cars, drones, and robots are becoming more prevalent, promising to revolutionize transportation, logistics, and manufacturing.")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    //set max width of the tooltip
+                    .style("max-width", "300px");
+            })
+            .on("mouseout", function (event, d) {
+                //make the text normal when mouse is not hovering over it
+                d3.select("text")
+                    .style("font-size", "12px");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
-    // Add the title.
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", marginTop / 2)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text("Semiconductor Companies Revenue Over Time");
+        //add revenue data to the chart
+        //create the revenue chart
+        const line = d3.line()
+            .x(d => x(new Date(d.Date)))
+            //ignore market cap values that are not numbers
+            .y(d => y(+d["Market Cap"] / billion));
 
-    //Add a legend to the bottom of the chart
-    const legend = svg.selectAll(".legend")
-        .data([adiAttr, amdAttr, avgoAttr, armAttr, intcAttr, muAttr, nvdaAttr, qcomAttr, tsmAttr, txnAttr])
-        .enter()
-        .append("g")
-        .attr("class", "legend")
-        .attr("transform", (d, i) => `translate(${300 + i * 50},${height - marginBottom + 50})`);
+        //append the line to the svg
+        svg.append("path")
+            .datum(adiMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", adiAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
 
-    //add colored rectangles to the legend
+        svg.append("path")
+            .datum(amdMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", amdAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
 
-    legend.append("rect")
-        .attr("x", 0)
-        .attr("width", 19)
-        .attr("height", 19)
-        .attr("fill", d => d.color)
-        .on("mouseover", function (event, d) {
-            //enlarge the rectangle when hovered over
-            d3.select(event.currentTarget)
-                .transition()
-                .duration(200)
-                .attr("width", 22)
-                .attr("height", 22);
-            //display a pop up block with company information using tooltip
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-            tooltip.html(d.name + "<br/>Ticker: " + d.ticker + "<br/>Market Cap(B):" + d.marketCap / 1000000000 + "<br/>" + d.description + "<br/>Click to view more financial information on yahoo: " + d.stock)
-                .style("left", (event.pageX + 5) + "px")
-                .style("top", (event.pageY - 28) + "px");
-            //highlight the line which color attribute is the same as the rectangle
-            d3.selectAll("path")
-                .classed("highlight", false)
-                .attr("opacity", 0.2);
-            d3.selectAll(`path[stroke="${d.color}"]`)
-                .classed("highlight", true)
-                .attr("opacity", 1);
+        svg.append("path")
+            .datum(avgoMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", avgoAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
 
-            //highlight the dots
-            d3.selectAll("circle")
-                .classed("highlight", false)
-                .attr("opacity", 0.2);
-            d3.selectAll(`circle[fill="${d.color}"]`)
-                .classed("highlight", true)
-                .attr("opacity", 1);
+        svg.append("path")
+            .datum(armMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", armAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
 
-        })
-        .on("mouseout", function (event, d) {
-            //shrink the rectangle when mouse is not hovering over it
-            d3.select(event.currentTarget)
-                .transition()
-                .duration(200)
-                .attr("width", 19)
-                .attr("height", 19);
-            //hide the tooltip
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-            //shrink the line when mouse is not hovering over it
+        svg.append("path")
+            .datum(intcMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", intcAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+
+            .datum(muMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", muAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(nvdaMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", nvdaAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(qcomMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", qcomAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(tsmMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", tsmAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        svg.append("path")
+            .datum(txnMarketCapData)
+            .attr("fill", "none")
+            .attr("stroke", txnAttr.color)
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        //Add legen
+        //highlight the line when the legend is hovered over and dim the rest
+        //also make the dots larger when hovered over
+        function modifyPathEffects(dataArray, companyAttr) {
             svg.selectAll("path")
-                .filter(path => path === d)
-                .attr("stroke-width", 1.5);
-            //bring the opacity back to 1 for lines and circles
-            d3.selectAll("path")
-                .attr("opacity", 1);
-            d3.selectAll("circle")
-                .attr("opacity", 1);
+                .filter(path => path === dataArray)
+                .on("mouseover", function (event, d) {
+                    svg.selectAll("path")
+                        .filter(path => path === d)
+                        .attr("stroke-width", 3);
+                    //dim the rest of the lines
+                    svg.selectAll("path")
+                        .filter(path => path !== d)
+                        //make the stroke opacity 0.5
+                        .attr("stroke-opacity", 0.2);
+                    //dim the dots
+                    d3.selectAll("circle")
+                        .classed("highlight", false)
+                        .attr("opacity", 0.2);
+                    //highlight the dots of the line that has the same color as the path
 
-        })
-        .on("click", function (event, d) {
-            //open a new tab with the company's information
-            window.open(d.stock, "_blank");
+                    d3.selectAll(`circle[fill="${companyAttr.color}"]`)
+                        .classed("highlight", true)
+                        .attr("opacity", 1);
+                    //console.log(d);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(companyAttr.name + "<br/>Hover over the legend for more information")
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                }).on("mouseout", function (event, d) {
+                    svg.selectAll("path")
+                        .filter(path => path === d)
+                        .attr("stroke-width", 1.5);
+                    //bring the opacity back to 1
+                    svg.selectAll("path")
+                        .filter(path => path !== d)
+                        .attr("stroke-opacity", 1);
+                    d3.selectAll("circle")
+                        .classed("highlight", false)
+                        .attr("opacity", 1);
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+        }
 
+        modifyPathEffects(adiRevenueData, adiAttr);
+        modifyPathEffects(amdRevenueData, amdAttr);
+        modifyPathEffects(avgoRevenueData, avgoAttr);
+        modifyPathEffects(armRevenueData, armAttr);
+        modifyPathEffects(intcRevenueData, intcAttr);
+        modifyPathEffects(muRevenueData, muAttr);
+        modifyPathEffects(nvdaRevenueData, nvdaAttr);
+        modifyPathEffects(qcomRevenueData, qcomAttr);
+        modifyPathEffects(tsmRevenueData, tsmAttr);
+        modifyPathEffects(txnRevenueData, txnAttr);
+
+
+        // Add a tooltip.
+        const tooltip = d3.select("#container").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Add the title.
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", marginTop / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Semiconductor Companies Market Cap Over Time");
+
+        //Add a legend to the bottom of the chart
+        const legend = svg.selectAll(".legend")
+            .data([adiAttr, amdAttr, avgoAttr, armAttr, intcAttr, muAttr, nvdaAttr, qcomAttr, tsmAttr, txnAttr])
+            .enter()
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => `translate(${300 + i * 50},${height - marginBottom + 50})`);
+
+        //add colored rectangles to the legend
+
+        legend.append("rect")
+            .attr("x", 0)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", d => d.color)
+            .on("mouseover", function (event, d) {
+                //enlarge the rectangle when hovered over
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr("width", 22)
+                    .attr("height", 22);
+                //display a pop up block with company information using tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(d.name + "<br/>Ticker: " + d.ticker + "<br/>Market Cap(B):" + d.marketCap / 1000000000 + "<br/>" + d.description + "<br/>Click to view more financial information on yahoo: " + d.stock)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    .style("max-width", "300px");
+                //highlight the line which color attribute is the same as the rectangle
+                d3.selectAll("path")
+                    .classed("highlight", false)
+                    .attr("opacity", 0.2);
+                d3.selectAll(`path[stroke="${d.color}"]`)
+                    .classed("highlight", true)
+                    .attr("opacity", 1);
+
+                //highlight the dots
+                d3.selectAll("circle")
+                    .classed("highlight", false)
+                    .attr("opacity", 0.2);
+                d3.selectAll(`circle[fill="${d.color}"]`)
+                    .classed("highlight", true)
+                    .attr("opacity", 1);
+
+            })
+            .on("mouseout", function (event, d) {
+                //shrink the rectangle when mouse is not hovering over it
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr("width", 19)
+                    .attr("height", 19);
+                //hide the tooltip
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                //shrink the line when mouse is not hovering over it
+                svg.selectAll("path")
+                    .filter(path => path === d)
+                    .attr("stroke-width", 1.5);
+                //bring the opacity back to 1 for lines and circles
+                d3.selectAll("path")
+                    .attr("opacity", 1);
+                d3.selectAll("circle")
+                    .attr("opacity", 1);
+
+            })
+            .on("click", function (event, d) {
+                //open a new tab with the company's information
+                window.open(d.stock, "_blank");
+
+            });
+
+        //add labels under the rectangles
+        legend.append("text")
+            .attr("x", 0)
+            .attr("y", 22)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(d => d.ticker)
+            //make text size smaller
+            .style("font-size", "10px");
+
+        //use d3-annotate to highlight important events
+        const events = {
+            //dot com bubble
+            "2000-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Dot-com Bubble",
+                    title: "2000-2002",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 50,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2000-01-01")),
+                y: height - marginBottom - 20,
+                dy: -50,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            },
+            //2008 Financial Crisis
+            "2008-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "2008 Financial Crisis",
+                    title: "2008-2009",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 20,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2008-01-01")),
+                y: height - marginBottom - 20,
+                dy: -10,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            },
+
+            //COVID-19 Pandemic
+            "2020-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "COVID-19 Pandemic",
+                    title: "2020-2021",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 20,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2020-01-01")),
+                y: height - marginBottom - 20,
+                dy: -50,
+                dx: -20,
+                color: "black",
+                //fontSize: 12
+            },
+
+            //2022 Generative AI and Autonomous Systems
+            "2022-01-01": {
+                type: d3.annotationCalloutCircle,
+                note: {
+                    label: "Generative AI and Autonomous Systems",
+                    title: "The debut of ChatGPT",
+                    wrap: 190
+                },
+                subject: {
+                    radius: 50,
+                    radiusPadding: 10
+                },
+                x: x(new Date("2022-6-30")),
+                y: height - marginBottom - 100,
+                dy: -20,
+                dx: 20,
+                color: "black",
+                //fontSize: 12
+            }
+        }
+        const makeAnnotations = d3.annotation()
+            .type(d3.annotationLabel)
+            .annotations(Object.values(events))
+
+        svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations),
+            d3.selectAll(".annotation-group")
+                .style("font-size", "12px")
+                .attr("fill", "black");
+    }
+    //create the revenue chart
+
+    //createMarketMapGraph();
+
+    //add a button to switch to market cap chart
+    //put the buttons on the top of the page
+    const buttonContainer = d3.select("#container")
+        .append("div")
+        .attr("class", "button-container")
+        .style("text-align", "center");
+
+    //add a button to switch to revenue chart
+    buttonContainer.append("button")
+        .attr("class", "button")
+        .text("Revenue Chart")
+        .on("click", function () {
+            //remove the existing chart
+            d3.select("svg").remove();
+            //create the revenue chart
+            createRevenueChart();
         });
 
-    //add labels under the rectangles
-    legend.append("text")
-        .attr("x", 0)
-        .attr("y", 22)
-        .attr("dy", ".35em")
-        .style("text-anchor", "start")
-        .text(d => d.ticker)
-        //make text size smaller
-        .style("font-size", "10px");
+    //add a button to switch to market cap chart
+    buttonContainer.append("button")
+        .attr("class", "button")
+        .text("Market Cap Chart")
+        .on("click", function () {
+            //remove the existing chart
+            d3.select("svg").remove();
+            //create the market cap chart
+            createMarketMapGraph();
+        });
 
-    /*
-    //highlight the line when the legend is hovered over
-    legend.on("mouseover", function (event, d) {
-        svg.selectAll("path")
-            .filter(path => path === d)
-            .attr("stroke-width", 3);
-    }).on("mouseout", function (event, d) {
-        svg.selectAll("path")
-            .filter(path => path === d)
-            .attr("stroke-width", 1.5);
-    });
-
-    */
-    //create a listener for the path. When legend item of the same color is hovered over, the line is highlighted
-    //and the rest of the lines are dimmed
-
-
+    createRevenueChart();
 </script>
